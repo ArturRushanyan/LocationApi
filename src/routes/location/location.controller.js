@@ -47,10 +47,36 @@ const updateLocationById = async (req, res) => {
         const data = req.body;
         const { location_id } = req.params;
 
-        const returnValue = await LocationService.updateLocationById(parseInt(location_id), data);
+        await LocationService.updateLocationById(parseInt(location_id), data);
 
         return res.status(200).json({ message: 'Successfully updated' });
 
+    } catch (error) {
+        return ErrorHandler(res, error.code || 400, error)
+    }
+}
+
+const updateLocationByCategory = async (req, res) => {
+    try {
+        const category = req.query.category
+        const data = req.query;
+        delete data.category;
+
+        const returnValue = await LocationService.updateByCategory(category, data);
+
+        return res.status(200).json({ countOfUpdatedEntities: returnValue.count, message: 'Successfully updated' })
+    } catch (error) {
+        return ErrorHandler(res, error.code || 400, error)
+    }
+}
+
+const deleteLocationById = async (req, res) => {
+    try {
+        const { location_id } = req.params;
+
+        await LocationService.deleteLocationById(parseInt(location_id));
+
+        return res.status(200).json({ message: 'Successfully deleted', location_id });
     } catch (error) {
         return ErrorHandler(res, error.code || 400, error)
     }
@@ -60,5 +86,7 @@ module.exports = {
     createLocation,
     getPaginatedLocations,
     getLocationById,
-    updateLocationById
+    updateLocationById,
+    updateLocationByCategory,
+    deleteLocationById
 }

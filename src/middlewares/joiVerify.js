@@ -7,7 +7,7 @@ const createLocation = (req, res, next) => {
     const result = schema.validate(req.body);
 
     if (result.error) {
-        return ErrorHandler(res, 422, { message: Constants.VALIDATION_ERROR });
+        return ErrorHandler(res, 422, { message: result.error.message || Constants.VALIDATION_ERROR });
     }
 
     next();
@@ -31,14 +31,27 @@ const updateLocationById = (req, res, next) => {
     const result = schema.validate(req.body);
 
     if (result.error) {
-        return ErrorHandler(res, 422, { message: Constants.VALIDATION_ERROR });
+        return ErrorHandler(res, 422, { message: result.error.message || Constants.VALIDATION_ERROR });
     }
 
     next();
 }
 
+const updateLocationByCategory = (req, res, next) => {
+    const schema = Schema.updateLocationByCategory;
+    const result = schema.validate(req.query);
+
+    if (result.error) {
+        return ErrorHandler(res, 422, { message: result.error.message || Constants.VALIDATION_ERROR });
+    }
+
+    next();
+
+}
+
 module.exports = {
     createLocation,
     getPaginatedLocations,
-    updateLocationById
+    updateLocationById,
+    updateLocationByCategory
 }

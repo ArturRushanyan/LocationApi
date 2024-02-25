@@ -34,9 +34,39 @@ const updateLocationById = async (location_id, data) => {
     })
 }
 
+const updateByCategory = async (category, data) => {
+
+    try {
+        return prisma.$transaction(async tx => {
+            throw Error()
+            return tx.location.updateMany({
+                where: {
+                    category
+                },
+                data
+            })
+        });
+        
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+const deleteLocationById = async (location_id) => {
+    // Here is used deleteMany function to avoid of prisma exception in case of wrong or non-existent location_id.
+    return prisma.location.deleteMany({
+        where: {
+            location_id
+        }
+    })
+}
+
 module.exports = {
     createLocation,
     getPaginatedLocations,
     getById,
-    updateLocationById
+    updateLocationById,
+    updateByCategory,
+    deleteLocationById
 }
