@@ -6,10 +6,16 @@ const createLocation = async (locationData) => {
     });
 }
 
-const getPaginatedLocations = async (skip, take) => {
+const getPaginatedLocations = async (skip, take, category = null) => {
+    const where = {}
+    if (category) {
+        where.category = category;
+    }
+
     return prisma.location.findMany({
         skip: skip - 1,
         take: take,
+        where,
         orderBy: {
             location_id: 'asc'
         }

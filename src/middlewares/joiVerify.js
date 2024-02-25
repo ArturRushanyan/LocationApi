@@ -1,4 +1,4 @@
-const Schema =  require('../JoiSchemas/verifayingSchema');
+const Schema =  require('../JoiSchemas/verifyingSchema');
 const ErrorHandler = require('../utils/errorHandler');
 const Constants = require('../utils/const_messages');
 
@@ -22,6 +22,23 @@ const getPaginatedLocations = (req, res, next) => {
     if (!req.body.page_size || req.body.page_size < 1) {
         req.body.page_size = 10;
     } 
+
+    next();
+}
+
+const getPaginatedLocationsByCategory = (req, res, next) => {
+    
+    if (!req.query.page || req.query.page < 1) {
+        req.query.page = 1;
+    } 
+
+    if (!req.query.page_size || req.query.page_size < 1) {
+        req.query.page_size = 10;
+    } 
+
+    if (!req.query.category || typeof req.query.category !== 'string' ) {
+        return ErrorHandler(res, 422, { message: Constants.CATEGORY_VALIDATION_ERROR });
+    }
 
     next();
 }
@@ -53,5 +70,6 @@ module.exports = {
     createLocation,
     getPaginatedLocations,
     updateLocationById,
-    updateLocationByCategory
+    updateLocationByCategory,
+    getPaginatedLocationsByCategory
 }
