@@ -26,7 +26,19 @@ const getPaginatedLocations = (req, res, next) => {
     next();
 }
 
+const updateLocationById = (req, res, next) => {
+    const schema = Schema.updateLocation;
+    const result = schema.validate(req.body);
+
+    if (result.error) {
+        return ErrorHandler(res, 422, { message: Constants.VALIDATION_ERROR });
+    }
+
+    next();
+}
+
 module.exports = {
     createLocation,
-    getPaginatedLocations
+    getPaginatedLocations,
+    updateLocationById
 }

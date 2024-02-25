@@ -14,9 +14,29 @@ const getPaginatedLocations = async (skip, take) => {
             location_id: 'asc'
         }
     });
-} 
+}
+
+const getById = async (location_id) => {
+    return prisma.location.findFirst({
+        where: {
+            location_id
+        }
+    })
+}
+
+const updateLocationById = async (location_id, data) => {
+    return prisma.location.update({
+        where: {
+            location_id
+        },
+        data,
+        
+    })
+}
 
 module.exports = {
     createLocation,
-    getPaginatedLocations
+    getPaginatedLocations,
+    getById,
+    updateLocationById
 }
